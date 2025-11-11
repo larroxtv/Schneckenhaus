@@ -111,4 +111,15 @@ public final class ProtectShellSystem extends System {
             iterator.remove();
         }
     }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void preventDropsFromPlacedShells(BlockDropItemEvent event) {
+        // Prevent placed shells from dropping normal items when broken
+        // This is especially important for explosions where a shulker box might drop an empty box
+        Shell shell = plugin.getShellManager().getLinkedShell(event.getBlock());
+        if (shell != null) {
+            // The BreakShellSystem will handle dropping the correct shell item
+            event.setCancelled(true);
+        }
+    }
 }

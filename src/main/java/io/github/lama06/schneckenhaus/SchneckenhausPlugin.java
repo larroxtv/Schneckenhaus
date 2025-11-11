@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.sql.Connection;
 
 public final class SchneckenhausPlugin extends JavaPlugin implements Listener {
-    private static final int BSTATS_ID = 21674;
     public static SchneckenhausPlugin INSTANCE;
 
     private Logger logger;
@@ -74,12 +73,6 @@ public final class SchneckenhausPlugin extends JavaPlugin implements Listener {
             command = new SchneckenhausCommand();
             getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> command.register(event.registrar()));
 
-            try {
-                startBstats();
-            } catch (Exception e) {
-                getSLF4JLogger().warn("Failed to start bStats", e);
-            }
-
             Bukkit.getPluginManager().registerEvents(this, this);
 
             new LegacyImporter().loadLegacyDataIfNecessary();
@@ -87,20 +80,6 @@ public final class SchneckenhausPlugin extends JavaPlugin implements Listener {
             getSLF4JLogger().error("failed to enable Schneckenhaus plugin", e);
             Bukkit.getPluginManager().disablePlugin(this);
         }
-    }
-
-    private void startBstats() {
-        Metrics metrics = new Metrics(this, BSTATS_ID);
-        metrics.addCustomChart(new SimplePie("custom_shell_types", () -> getPluginConfig().getCustom().isEmpty() ? "no" : "yes"));
-        metrics.addCustomChart(new SingleLineChart("shells", shellManager::getCurrentShellCount));
-        metrics.addCustomChart(new SimplePie("language", () -> {
-            Language language = getTranslator().getLanguage();
-            if (language == null) {
-                return "Default";
-            }
-            return language.getName();
-        }));
-        metrics.addCustomChart(new SimplePie("world_count", () -> String.valueOf(config.getConfig().getWorlds().size())));
     }
 
     @Override

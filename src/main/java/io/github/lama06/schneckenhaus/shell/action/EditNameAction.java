@@ -4,6 +4,7 @@ import io.github.lama06.schneckenhaus.Permission;
 import io.github.lama06.schneckenhaus.language.Message;
 import io.github.lama06.schneckenhaus.shell.Shell;
 import io.github.lama06.schneckenhaus.ui.InputScreen;
+import io.github.lama06.schneckenhaus.ui.ShellScreen;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,9 +45,9 @@ public class EditNameAction extends ShellScreenAction {
             newName -> {
                 shell.setName(newName);
                 player.sendMessage(Message.RENAME_SHELL_SUCCESS.asComponent(NamedTextColor.GREEN, newName));
+                new ShellScreen(shell, player).open();
             },
-            () -> {
-            }
+            () -> new ShellScreen(shell, player).open()
         ).open();
     }
 }

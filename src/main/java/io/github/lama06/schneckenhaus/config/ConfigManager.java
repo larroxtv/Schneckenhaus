@@ -56,7 +56,6 @@ public final class ConfigManager extends ConstantsHolder {
     public void save() {
         Map<String, Object> map = config.serialize();
         DumperOptions options = new DumperOptions();
-        options.setDereferenceAliases(true);
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.AUTO);
         Yaml yaml = new Yaml(new Representer(options) {
             @Override
